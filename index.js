@@ -26,6 +26,11 @@ wss.on('connection', (socket) => {
 
 });
 
+app.get('/', (req, res) => {
+    res.send("Hello World!");
+})
+
+
 http.listen(3030, () => {
     console.log("App rodando!");
 });
