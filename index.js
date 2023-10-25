@@ -1,8 +1,14 @@
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
-const WebSocket = require("ws");
-const wss = new WebSocket.Server({ server: http });
+const io = require("socket.io")(http, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });
+// const WebSocket = require("ws");
+// const wss = new WebSocket.Server({ server: http });
 
 // wss.on("connection", (socket) => {
 //     socket.on("disconnect", () => {
@@ -15,15 +21,25 @@ const wss = new WebSocket.Server({ server: http });
 
 // })
 
-wss.on('connection', (socket) => {
-    console.log("A new client Connected!");
+// wss.on('connection', (socket) => {
+//     console.log("A new client Connected!");
 
-    socket.send("Welcome New Client!");
-    socket.on("message", (message) => {
-        console.log("Received: %s", message);
-        socket.send("Got your msg its: " + message);
+//     socket.send("Welcome New Client!");
+//     socket.on("message", (message) => {
+//         console.log("Received: %s", message);
+//         socket.send("Got your msg its: " + message);
+//     });
+
+// });
+
+io.on("connection", (socket) => {
+    socket.on("disconnect", () => {
+        console.log("Desconectado: " + socket.id);
     });
 
+    socket.on("confirmConnection", (data) => {
+        console.log("Conectado: " + data.message);
+    });
 });
 
 app.get('/', (req, res) => {
