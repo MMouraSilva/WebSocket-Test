@@ -39,6 +39,7 @@ io.on("connection", (socket) => {
 
     socket.on("confirmConnection", (data) => {
         console.log("Conectado: " + data.message);
+        socket.emit("responseConnection", { message: "Respondendo a conexão" });
     });
 });
 
